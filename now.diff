@@ -1,0 +1,918 @@
+commit c2d6da608757917147791c39ef8fdc7fc0c538fe
+Author: Armin Weatherwax <arminweatherwax@lavabit.com>
+Date:   Thu Mar 15 01:12:25 2012 +0100
+
+    build instructions and GPL
+
+diff --git a/build_instructions b/build_instructions
+index bd7a572..2c5930a 100644
+--- a/build_instructions
++++ b/build_instructions
+@@ -1,7 +1,7 @@
+-Mit dbus:
++With dbus:
+ qmake CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server -recursive
+ 
+-Ohne dbus (recommended, mandatory for use with Imprudence):
++Without dbus (recommended, mandatory for use with Imprudence):
+ qmake CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server CONFIG+=no-dbus -recursive
+ 
+ nmake release
+\ No newline at end of file
+diff --git a/src/mumble/wConfigFile.cpp b/src/mumble/wConfigFile.cpp
+index 1aca7c9..4f45896 100644
+--- a/src/mumble/wConfigFile.cpp
++++ b/src/mumble/wConfigFile.cpp
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
++
+ #include <cstdlib>
+ #include <QtCore>
+ 
+diff --git a/src/mumble/wConfigFile.h b/src/mumble/wConfigFile.h
+index 2804f37..3d5111e 100644
+--- a/src/mumble/wConfigFile.h
++++ b/src/mumble/wConfigFile.h
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
++
+ #ifndef WCONFIGFILE_H
+ #define WCONFIGFILE_H
+ 
+diff --git a/src/mumble/wConnection.cpp b/src/mumble/wConnection.cpp
+index 1efde67..4ade2d1 100644
+--- a/src/mumble/wConnection.cpp
++++ b/src/mumble/wConnection.cpp
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #include <QtCore>
+diff --git a/src/mumble/wConnection.h b/src/mumble/wConnection.h
+index befaeca..39c2697 100644
+--- a/src/mumble/wConnection.h
++++ b/src/mumble/wConnection.h
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #ifndef WCONNECTION_H
+diff --git a/src/mumble/wError.cpp b/src/mumble/wError.cpp
+index 1dafa80..c7fbbba 100644
+--- a/src/mumble/wError.cpp
++++ b/src/mumble/wError.cpp
+@@ -1,34 +1,22 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-*/
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
+ 
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
++*/
+ 
+ #include <cstdlib>
+ #include <QtCore>
+diff --git a/src/mumble/wError.h b/src/mumble/wError.h
+index 1b6ea00..4006f29 100644
+--- a/src/mumble/wError.h
++++ b/src/mumble/wError.h
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
+ 
+-   All rights reserved.
++   This file is part of Whisper.
+ 
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
+ 
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
+ 
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #ifndef WERROR_H
+diff --git a/src/mumble/wEvent.cpp b/src/mumble/wEvent.cpp
+index 20b9cd7..7abc976 100644
+--- a/src/mumble/wEvent.cpp
++++ b/src/mumble/wEvent.cpp
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+- #include <iostream>
++
++#include <iostream>
+ #include "wGlobal.h"
+ #include "wError.h"
+ #include "wXmlWriter.h"
+diff --git a/src/mumble/wEvent.h b/src/mumble/wEvent.h
+index 8f823e8..d32f500 100644
+--- a/src/mumble/wEvent.h
++++ b/src/mumble/wEvent.h
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
++
+ #ifndef WEVENT_H
+ #define WEVENT_H
+ 
+diff --git a/src/mumble/wGameHandler.h b/src/mumble/wGameHandler.h
+index 2c98fab..b42d4f0 100644
+--- a/src/mumble/wGameHandler.h
++++ b/src/mumble/wGameHandler.h
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
++
+ #ifndef WGAMEHANDLER_H
+ #define WGAMEHANDLER_H
+ 
+diff --git a/src/mumble/wGlobal.h b/src/mumble/wGlobal.h
+index 9ad34b7..933d210 100644
+--- a/src/mumble/wGlobal.h
++++ b/src/mumble/wGlobal.h
+@@ -1,34 +1,24 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
++
+ #ifndef WGLOBAL_H
+ #define WGLOBAL_H
+ 
+diff --git a/src/mumble/wMessage.cpp b/src/mumble/wMessage.cpp
+index af3a6fa..74d6f64 100644
+--- a/src/mumble/wMessage.cpp
++++ b/src/mumble/wMessage.cpp
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #include "wMessage.h"
+diff --git a/src/mumble/wMessage.h b/src/mumble/wMessage.h
+index b0a91a9..2f4d33a 100644
+--- a/src/mumble/wMessage.h
++++ b/src/mumble/wMessage.h
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #ifndef WMESSAGE_H
+diff --git a/src/mumble/wRequest.cpp b/src/mumble/wRequest.cpp
+index f6e571c..be40b6e 100644
+--- a/src/mumble/wRequest.cpp
++++ b/src/mumble/wRequest.cpp
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #include <iostream>
+diff --git a/src/mumble/wRequest.h b/src/mumble/wRequest.h
+index 3d2337e..d68623c 100644
+--- a/src/mumble/wRequest.h
++++ b/src/mumble/wRequest.h
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #ifndef WREQUEST_H
+diff --git a/src/mumble/wRequestQueue.cpp b/src/mumble/wRequestQueue.cpp
+index f17990e..b0212c6 100644
+--- a/src/mumble/wRequestQueue.cpp
++++ b/src/mumble/wRequestQueue.cpp
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #include <QtCore/QMutex>
+diff --git a/src/mumble/wXmlWriter.h b/src/mumble/wXmlWriter.h
+index 1743c7b..a6f34bc 100644
+--- a/src/mumble/wXmlWriter.h
++++ b/src/mumble/wXmlWriter.h
+@@ -1,32 +1,21 @@
+-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+-                            Volker Gaessler <volker.gaessler@vcomm.ch
+-
+-   All rights reserved.
+-
+-   Redistribution and use in source and binary forms, with or without
+-   modification, are permitted provided that the following conditions
+-   are met:
+-
+-   - Redistributions of source code must retain the above copyright notice,
+-     this list of conditions and the following disclaimer.
+-   - Redistributions in binary form must reproduce the above copyright notice,
+-     this list of conditions and the following disclaimer in the documentation
+-     and/or other materials provided with the distribution.
+-   - Neither the name of the Mumble Developers nor the names of its
+-     contributors may be used to endorse or promote products derived from this
+-     software without specific prior written permission.
+-
+-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++/*
++   Whisper is a Mumble based voice client for OpenSim
++   Copyright (C) 2009-2010  Volker Gaessler <volker.gaessler@vcomm.ch>
++
++   This file is part of Whisper.
++
++   Whisper is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+ 
+ #ifndef WXMLWRITER_H
