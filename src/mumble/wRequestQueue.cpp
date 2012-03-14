@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,64 +29,55 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "wConfigFile.h"
+#include <QtCore/QMutex>
 #include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include "wRequestQueue.h"
 
-#define WHISPER_VERSION "0.2.5"
-
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
+using namespace std;
 using namespace whisper;
 
+//Adds an actor to the queue
+void RequestQueue::enqueue(Actor* pA) {
+    WDEF;
 
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
+    //Locks the processes
+    QMutexLocker locker(&mutex);
 
-	char* pcAppData = NULL;
-	QString sConfigDir;
+    WASSERT(pA);
 
-#ifdef Q_OS_WIN
-	pcAppData = getenv("APPDATA");
-#endif
+    //Adds the actor
+    queue.enqueue(pA);
 
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
-}
+    //Wakes up the processes
+    dataAvailable.wakeAll();
 
+    WDEBUG2("RequestQueue: request enqueued, %d in queue now", queue.count());
+    WEND:;
+    }
 
-// ------------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------------
+//Take an actor out from the queue and executes its postProcess().
+Actor* RequestQueue::dequeue() {
 
-int main_application(int argc, char **argv, GameHandler *pGh);
+    //Initialize the actor
+    Actor* pA = 0;
 
-int main(int argc, char **argv) {
+    //Locks the processes
+    QMutexLocker locker(&mutex);
 
-	InitializeDataDir();
+    //Loops till an actor is found. If none, release the processes and waits one second
+    while(1) {
 
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
+        if(!queue.isEmpty()) {
+            pA = queue.dequeue();
+            if(!pA) {
+                WDEBUG1("Null pointer dequeued from request queue! -> Waiting for new data.");
+            } else {
+                WDEBUG2("RequestQueue: request dequeued, %d remaining", queue.count());
+                return pA;
+            }
+        }
+		// return in case of timeout
+		if (!dataAvailable.wait(&mutex, 1000))
+			return 0;
+    }
 }

@@ -56,6 +56,7 @@ Global::Global() {
 	bAttenuateOthers = false;
 
 	qs = NULL;
+	gh = 0;
 
 	QStringList qsl;
 	qsl << QCoreApplication::instance()->applicationDirPath();

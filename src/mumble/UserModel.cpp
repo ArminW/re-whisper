@@ -41,6 +41,9 @@
 #include "Log.h"
 #include "Database.h"
 #include "Usage.h"
+//Whisper integration
+#include "wViewerHandler.h"
+using namespace whisper;
 
 QHash <Channel *, ModelItem *> ModelItem::c_qhChannels;
 QHash <ClientUser *, ModelItem *> ModelItem::c_qhUsers;
@@ -780,6 +783,11 @@ ClientUser *UserModel::addUser(unsigned int id, const QString &name) {
 	connect(p, SIGNAL(talkingChanged()), this, SLOT(userTalkingChanged()));
 	connect(p, SIGNAL(muteDeafChanged()), this, SLOT(userMuteDeafChanged()));
 
+        //Whisper Integration
+        //ViewerHandler& vh(ViewerHandler::instance());
+		if(g.gh)
+			g.gh->addParticipant(id);
+
 	Channel *c = Channel::get(0);
 	ModelItem *citem = ModelItem::c_qhChannels.value(c);
 
@@ -810,7 +818,12 @@ void UserModel::removeUser(ClientUser *p) {
 	ModelItem *item = ModelItem::c_qhUsers.value(p);
 	ModelItem *citem = ModelItem::c_qhChannels.value(c);
 
-	int row = citem->qlChildren.indexOf(item);
+        //Whisper Integration
+        //ViewerHandler& vh(ViewerHandler::instance());
+		if (g.gh)
+			g.gh->removeParticipant(p->uiSession);
+
+        int row = citem->qlChildren.indexOf(item);
 
 	beginRemoveRows(index(citem), row, row);
 	c->removeUser(p);
@@ -1160,6 +1173,11 @@ void UserModel::userTalkingChanged() {
 	QModelIndex idx = index(p);
 	emit dataChanged(idx, idx);
 	updateOverlay();
+        //Whisper integration
+        //ViewerHandler& vh(ViewerHandler::instance());
+		if(g.gh)
+			g.gh->setTalking(p->uiSession);
+
 }
 
 void UserModel::userMuteDeafChanged() {

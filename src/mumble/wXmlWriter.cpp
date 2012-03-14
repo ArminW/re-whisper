@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,64 +29,55 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "wConfigFile.h"
 #include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include "wXmlWriter.h"
 
-#define WHISPER_VERSION "0.2.5"
-
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
+using namespace std;
 using namespace whisper;
 
 
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#ifdef Q_OS_WIN
-	pcAppData = getenv("APPDATA");
-#endif
-
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+XmlWriter::XmlWriter(QByteArray* pD) {
+    pData = pD;
 }
 
+XmlWriter::XmlWriter(QByteArray& rD) {
+    pData = &rD;
+}
 
-// ------------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------------
+void XmlWriter::writeStart(const char *pcTag){
+    pData->append("<");
+    pData->append(pcTag);
+    pData->append(">");
+}
 
-int main_application(int argc, char **argv, GameHandler *pGh);
+void XmlWriter::writeEnd(const char *pcTag) {
+    pData->append("</");
+    pData->append(pcTag);
+    pData->append(">");
+}
 
-int main(int argc, char **argv) {
+void XmlWriter::writeAttribute(const char *pcName, const char *pcValue) {
+    pData->truncate(pData->size()-1);
+    pData->append(" ");
+    pData->append(pcName);
+    pData->append("=\"");
+    pData->append(pcValue);
+    pData->append("\">");
+}
 
-	InitializeDataDir();
+void XmlWriter::writeAttribute(const char *pcName, QString& rS) {
+    writeAttribute(pcName, rS.toAscii().data());
+}
 
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
+void XmlWriter::writeText(const char *pcText) {
+    pData->append(pcText);
+}
+void XmlWriter::writeText(QString& rS) {
+    pData->append(rS.toAscii());
+}
 
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
+void XmlWriter::writeEmpty(const char* pcTag) {
+    pData->append("<");
+    pData->append(pcTag);
+    pData->append(" />");
 }

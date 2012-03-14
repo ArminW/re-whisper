@@ -52,6 +52,10 @@ class LCD;
 class BonjourClient;
 class CELTCodec;
 
+namespace whisper {
+	class GameHandler;
+}
+
 struct Global {
 private:
 	Q_DISABLE_COPY(Global)
@@ -89,6 +93,7 @@ public:
 	int iCodecAlpha, iCodecBeta;
 	bool bPreferAlpha;
 	bool bAttenuateOthers;
+	whisper::GameHandler *gh;
 	Global();
 	~Global();
 };

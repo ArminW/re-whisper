@@ -29,11 +29,16 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
+
 #include "Settings.h"
 #include "Log.h"
 #include "Global.h"
 #include "AudioInput.h"
 #include "Cert.h"
+
+#include "wError.h" // VGDEBUG
+using namespace whisper;
 
 bool Shortcut::isServerSpecific() const {
 	if (qvData.canConvert<ShortcutTarget>()) {
@@ -122,7 +127,8 @@ Settings::Settings() {
 	atTransmit = VAD;
 	bTransmitPosition = false;
 	bMute = bDeaf = false;
-	bTTS = true;
+        //Whisper integration
+        bTTS = false;
 	iTTSVolume = 75;
 	iTTSThreshold = 250;
 	iQuality = 40000;
@@ -195,7 +201,8 @@ Settings::Settings() {
 	fAudioMaxDistVolume = 0.80f;
 	fAudioBloom = 0.5f;
 
-	bOverlayEnable = true;
+        //Whisper integration
+        bOverlayEnable = false;
 	bOverlayUserTextures=true;
 	osOverlay = All;
 	bOverlayAlwaysSelf = true;
@@ -624,7 +631,10 @@ void Settings::save() {
 	SAVELOAD(iLCDUserViewMinColWidth, "lcd/userview/mincolwidth");
 	SAVELOAD(iLCDUserViewSplitterWidth, "lcd/userview/splitterwidth");
 
+	WDEBUG1 ("VGDEBUG Settings: before certificate check");
 	QByteArray qba = CertWizard::exportCert(kpCertificate);
+	WDEBUG1 ("VGDEBUG Settings: after certificate check");
+
 	g.qs->setValue(QLatin1String("net/certificate"), qba);
 
 	g.qs->beginWriteArray(QLatin1String("shortcuts"));
@@ -640,6 +650,8 @@ void Settings::save() {
 	}
 	g.qs->endArray();
 
+	WDEBUG1("VGDEBUG Settings: before messages");
+
 	g.qs->beginWriteArray(QLatin1String("messages"));
 	for (QMap<int, quint32>::const_iterator it = qmMessages.constBegin(); it != qmMessages.constEnd(); ++it) {
 		g.qs->setArrayIndex(it.key());
@@ -647,12 +659,16 @@ void Settings::save() {
 	}
 	g.qs->endArray();
 
+	WDEBUG1("VDEBUG Settings: before messagesounds");
+
 	g.qs->beginWriteArray(QLatin1String("messagesounds"));
 	for (QMap<int, QString>::const_iterator it = qmMessageSounds.constBegin(); it != qmMessageSounds.constEnd(); ++it) {
 		g.qs->setArrayIndex(it.key());
 		SAVELOAD(qmMessageSounds[it.key()], "logsound");
 	}
 	g.qs->endArray();
+
+	WDEBUG1("VDEBUG Settings: before devices");
 
 	g.qs->beginGroup(QLatin1String("lcd/devices"));
 	foreach(const QString &d, qmLCDDevices.keys()) {
@@ -663,6 +679,8 @@ void Settings::save() {
 			g.qs->remove(d);
 	}
 	g.qs->endGroup();
+
+	WDEBUG1("VDEBUG Settings: before audio");
 
 	g.qs->beginGroup(QLatin1String("audio/plugins"));
 	foreach(const QString &d, qmPositionalAudioPlugins.keys()) {

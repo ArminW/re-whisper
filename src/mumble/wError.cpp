@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,64 +29,79 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
+#include <cstdlib>
+#include <QtCore>
+
 #include "wConfigFile.h"
 #include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
 
-#define WHISPER_VERSION "0.2.5"
-
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
+using namespace std;
 using namespace whisper;
 
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#ifdef Q_OS_WIN
-	pcAppData = getenv("APPDATA");
-#endif
-
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+//Singleton
+Error* Error::pInstance = 0;
+Error& Error::instance() {
+    if(!pInstance) {
+        pInstance = new Error;
+    }
+    return *pInstance;
 }
 
+//File to log
+Error::Error() : pLog(NULL) {
+	QString sLogLevel = ConfigFile::getInstance().getValue("debug", "log_level");
+	bDebug = (sLogLevel == QString("debug"));
 
-// ------------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------------
+	// create the log file
+	// Unix: /var/whisper.log
+	// Windows: <userappdata>/whisper/whisper.log
+	// Mac: To Do
 
-int main_application(int argc, char **argv, GameHandler *pGh);
+	QString sLogFile = "/var/";
 
-int main(int argc, char **argv) {
+#ifdef Q_OS_WIN
+	char* pcAppData = NULL;
+	pcAppData = getenv("APPDATA");
+	if (pcAppData) {
+		sLogFile = pcAppData;
+		sLogFile += "/whisper/";
+	}
+	else {
+		sLogFile = "";
+	}
+#endif
 
-	InitializeDataDir();
+	sLogFile += "whisper.log";
 
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
+	pLog = new QFile(sLogFile);
+}
 
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
+//Opens the file
+void Error::open() {
+    if(!pLog->isOpen()) {
+        pLog->open(QIODevice::WriteOnly);
+    }
+}
 
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
+//Writes errors to log
+void Error::writeErrorLog (QString & rs)
+{
+	QMutexLocker locker(&mWriteMutex);
+    open();
+    //cerr << rs.toAscii().data();
+	pLog->write((QDateTime::currentDateTime()).toString("yyyy-MM-dd hh:mm:ss.zzz  ").toAscii());
+    pLog->write(rs.toAscii());
+    pLog->flush();
+}
 
-	return main_application(argc, argv, pVh);
+//Writes lines to log
+void Error::writeOutLog (QString & rs)
+{
+	QMutexLocker locker(&mWriteMutex);
+    open();
+    //cout << rs.toAscii().data();
+	pLog->write((QDateTime::currentDateTime()).toString("yyyy-MM-dd hh:mm:ss.zzz  ").toAscii());
+    pLog->write(rs.toAscii());
+    pLog->flush();
 }

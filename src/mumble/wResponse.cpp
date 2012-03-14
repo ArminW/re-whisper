@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,64 +29,58 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "wConfigFile.h"
-#include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include "wXmlWriter.h"
+#include "wRequest.h"
+#include "wResponse.h"
 
-#define WHISPER_VERSION "0.2.5"
-
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
+using namespace std;
 using namespace whisper;
 
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#ifdef Q_OS_WIN
-	pcAppData = getenv("APPDATA");
-#endif
-
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+void Response::reset(){
+    sRequestId.clear();
+    sAction.clear();
+    sInputXml.clear();
 }
 
+int Response::compose(Actor& rActor) {
+    Message::sData.clear();
+    XmlWriter qW(Message::sData);
 
-// ------------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------------
+    qW.writeStart("Response");
+    qW.writeAttribute("requestId", sRequestId);
+    qW.writeAttribute("action", sAction);
 
-int main_application(int argc, char **argv, GameHandler *pGh);
+    // <ReturnCode>
+    qW.writeStart("ReturnCode");
+    qW.writeText(rActor.isSuccess() ? "0" : "1");
+    qW.writeEnd("ReturnCode");
 
-int main(int argc, char **argv) {
+    // <Results>
+    qW.writeStart("Results");
 
-	InitializeDataDir();
+    qW.writeStart("StatusCode");
+    qW.writeText(rActor.getStatusCode());
+    qW.writeEnd("StatusCode");
 
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
+    if(rActor.getStatusString().isEmpty()) {
+        qW.writeEmpty("StatusString");
+    } else {
+        qW.writeStart("StatusString");
+        qW.writeText(rActor.getStatusString());
+        qW.writeEnd("StatusString");
+    }
 
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
+    // get the response from the Actor
+    rActor.response(&qW);
 
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
+    qW.writeEnd("Results"); // <Results>
 
-	return main_application(argc, argv, pVh);
+    qW.writeStart("InputXml");
+    qW.writeText(sInputXml);
+    qW.writeEnd("InputXml");
+
+    qW.writeEnd("Response"); // <Response>
+
+    return 0;
+
 }

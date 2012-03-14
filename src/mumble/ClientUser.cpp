@@ -44,6 +44,9 @@ ClientUser::ClientUser(QObject *p) : QObject(p) {
 	fAverageAvailable = 0.0f;
 	iFrames = 0;
 	iSequence = 0;
+
+    //Whisper integration
+    bMute = false;
 }
 
 ClientUser *ClientUser::get(unsigned int uiSession) {

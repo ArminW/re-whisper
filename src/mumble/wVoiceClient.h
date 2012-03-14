@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,64 +29,33 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "wConfigFile.h"
-#include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#ifndef WVOICECLIENT_H
+#define WVOICECLIENT_H
 
-#define WHISPER_VERSION "0.2.5"
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
+#include "wRequestQueue.h"
 
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
+namespace whisper {
+    //
+    // VoiceClient is a thread which manages the requests dequeue task
+    //
+    class VoiceClient : public QThread {
+    public:
+        VoiceClient(RequestQueue& rQ) : rQueue(rQ) { bEnd = false;}
+        void run();
+        void sleepMs(long int nMs) {msleep(nMs);}
+		void end() {bEnd = true;}
+        //bool keepAlive;
+        //bool keepAliveCascade;
 
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
-using namespace whisper;
-
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#ifdef Q_OS_WIN
-	pcAppData = getenv("APPDATA");
-#endif
-
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+    private:
+        //QMutex mutex;
+        //QWaitCondition waitRequest;
+        RequestQueue& rQueue;
+		bool bEnd;
+    };
 }
 
-
-// ------------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------------
-
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
-}
+#endif // WVOICECLIENT_H
