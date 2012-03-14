@@ -6,6 +6,38 @@ QT		*= network sql opengl xml svg
 TARGET		= mumble
 HEADERS		*= BanEditor.h ACLEditor.h ConfigWidget.h Log.h AudioConfigDialog.h AudioStats.h AudioInput.h AudioOutput.h CustomElements.h MainWindow.h ServerHandler.h About.h ConnectDialog.h GlobalShortcut.h TextToSpeech.h Settings.h Database.h VersionCheck.h Global.h UserModel.h Audio.h ConfigDialog.h Plugins.h LookConfig.h Overlay.h OverlayText.h SharedMemory.h AudioWizard.h ViewCert.h TextMessage.h NetworkConfig.h LCD.h Usage.h Cert.h ClientUser.h UserEdit.h Tokens.h UserView.h RichTextEditor.h UserInformation.h FileEngine.h SocketRPC.h VoiceRecorder.h VoiceRecorderDialog.h
 SOURCES		*= BanEditor.cpp ACLEditor.cpp ConfigWidget.cpp Log.cpp AudioConfigDialog.cpp AudioStats.cpp AudioInput.cpp AudioOutput.cpp main.cpp CustomElements.cpp MainWindow.cpp ServerHandler.cpp About.cpp ConnectDialog.cpp Settings.cpp Database.cpp VersionCheck.cpp Global.cpp UserModel.cpp Audio.cpp ConfigDialog.cpp Plugins.cpp LookConfig.cpp OverlayClient.cpp OverlayConfig.cpp OverlayEditor.cpp OverlayEditorScene.cpp OverlayUser.cpp OverlayUserGroup.cpp Overlay.cpp OverlayText.cpp SharedMemory.cpp AudioWizard.cpp ViewCert.cpp Messages.cpp TextMessage.cpp GlobalShortcut.cpp NetworkConfig.cpp LCD.cpp Usage.cpp Cert.cpp ClientUser.cpp UserEdit.cpp Tokens.cpp UserView.cpp RichTextEditor.cpp UserInformation.cpp FileEngine.cpp SocketRPC.cpp VoiceRecorder.cpp VoiceRecorderDialog.cpp
+
+
+HEADERS	*= \ 
+    wGameHandler.h \
+    wConnection.h \
+    wVoiceClient.h \
+    wViewerHandler.h \
+    wResponse.h \
+    wRequestQueue.h \
+    wRequest.h \
+    wMessage.h \
+    wGlobal.h \
+    wEvent.h \
+    wError.h \
+    wXmlWriter.h \
+    wTalkingThread.h \
+    wConfigFile.h
+SOURCES	*= \
+    main_application.cpp \
+    wConnection.cpp \
+    wVoiceClient.cpp \
+    wViewerHandler.cpp \
+    wResponse.cpp \
+    wRequestQueue.cpp \
+    wRequest.cpp \
+    wMessage.cpp \
+    wEvent.cpp \
+    wError.cpp \
+    wXmlWriter.cpp \
+    wTalkingThread.cpp \
+    wConfigFile.cpp
+
 SOURCES *= smallft.cpp
 DIST		*= ../../icons/mumble.ico licenses.h smallft.h ../../icons/mumble.xpm murmur_pch.h mumble.plist
 RESOURCES	*= mumble.qrc mumble_flags.qrc
@@ -282,8 +314,7 @@ CONFIG(no-update) {
 	QT_TRANSDIR = $$[QT_INSTALL_TRANSLATIONS]/
 	QT_TRANSDIR = $$replace(QT_TRANSDIR,/,$${DIR_SEPARATOR})
 
-	QT_TRANSLATION_FILES_SRC *= qt_de.qm qt_es.qm qt_fr.qm qt_ja.qm qt_ja_JP.qm qt_ru.qm qt_pl.qm qt_pt.qm qt_sv.qm qt_zh_CN.qm qt_zh_TW.qm
-
+	QT_TRANSLATION_FILES_SRC *= qt_de.qm qt_es.qm qt_fr.qm qt_ja.qm qt_ja.qm qt_ru.qm qt_pl.qm qt_pt.qm qt_sv.qm qt_zh_CN.qm qt_zh_TW.qm
 	for(lang, QT_TRANSLATION_FILES_SRC):exists($$[QT_INSTALL_TRANSLATIONS]/$${lang}) {
 		QT_TRANSLATION_FILES *= $${lang}
 	}

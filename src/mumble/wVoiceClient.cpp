@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,65 +29,42 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-
-#include "wConfigFile.h"
 #include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include "wRequest.h"
+#include "wVoiceClient.h"
 
-#define WHISPER_VERSION "0.2.5"
-
-
-
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
+using namespace std;
 using namespace whisper;
 
+//Thread run
+void VoiceClient::run() {
+    Actor* pActor = 0;
 
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
+    //Main loop
+    while(true) {
 
-	char* pcAppData = NULL;
-	QString sConfigDir;
+        //if(!this->keepAlive) {
+        //    this->rQueue.keepAlive = false;
+        //    this->keepAliveCascade = false;
+        //    return;
+        //}
 
-#if defined(Q_OS_WIN)
-	pcAppData = getenv("APPDATA");
-#endif
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
+        //Takes an actor from rQueue
+        pActor = rQueue.dequeue();
+
+		// VG check if thread is to end
+		if (bEnd) {
+			WDEBUG1("Thread VoiceClient returning");
+			return;
 		}
-	}
-}
 
-//---------------------------------------------------------------------------
-// main
-//---------------------------------------------------------------------------
+        //if(!pActor) {
+            //WDEBUG1("Invalid Actor pointer dequeued!");
+        //}else {
 
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
+		if (pActor) {
+            pActor->postProcess();
+            delete pActor;
+        }
+    }
 }
