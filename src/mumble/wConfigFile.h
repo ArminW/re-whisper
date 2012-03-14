@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,65 +29,60 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef WCONFIGFILE_H
+#define WCONFIGFILE_H
 
-#include "wConfigFile.h"
-#include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#pragma warning(disable : 4996)
 
-#define WHISPER_VERSION "0.2.5"
+#include <QtCore>
 
+namespace whisper {
 
+    class Parameter;
 
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
+    class ConfigFile {
+    public:
+        const QString getValue(const QString& family, const QString& key);
+        bool isValid() {return this->valid;}
+        static ConfigFile& getInstance();
+		static void init();
 
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
+    protected:
+        ConfigFile();
 
-using namespace whisper;
+    private:
+        static ConfigFile* cfInstance;
+        QFile* cf;
+        QList<Parameter> lcf;
+        bool valid;
+    };
 
+    class Parameter {
+    public:
+        //Friendship
+        friend class ConfigFile;
 
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
+        //Constructors
+        Parameter(const QString& family, const QString& key, const QString& value) {
+            this->family = family;
+            this->key = key;
+            this->value = value;
+        };
+        Parameter() {};
 
-	char* pcAppData = NULL;
-	QString sConfigDir;
+        //Getters
+        const QString getFamily() {return family;}
+        const QString getKey() {return key;}
+        const QString getValue() {return value;}
 
-#if defined(Q_OS_WIN)
-	pcAppData = getenv("APPDATA");
-#endif
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+        //Methods
+        bool isValid() { return !(family.isEmpty() || key.isEmpty() || value.isEmpty()); }
+
+    private:
+        QString family;
+        QString key;
+        QString value;
+    };
 }
 
-//---------------------------------------------------------------------------
-// main
-//---------------------------------------------------------------------------
-
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
-}
+#endif // WCONFIGFILE_H

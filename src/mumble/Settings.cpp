@@ -30,25 +30,29 @@
 */
 
 #include "Settings.h"
+
 #include "Log.h"
 #include "Global.h"
 #include "AudioInput.h"
 #include "Cert.h"
 #include "../../overlay/overlay.h"
 
+#include "wError.h" // VGDEBUG
+using namespace whisper;
+
 bool Shortcut::isServerSpecific() const {
 	if (qvData.canConvert<ShortcutTarget>()) {
-		const ShortcutTarget &sc = qvariant_cast<ShortcutTarget>(qvData);
+		const ShortcutTarget &sc = qvariant_cast<ShortcutTarget> (qvData);
 		return sc.isServerSpecific();
 	}
 	return false;
 }
 
-bool Shortcut::operator <(const Shortcut &other) const {
+bool Shortcut::operator < (const Shortcut &other) const {
 	return (iIndex < other.iIndex);
 }
 
-bool Shortcut::operator ==(const Shortcut &other) const {
+bool Shortcut::operator == (const Shortcut &other) const {
 	return (iIndex == other.iIndex) && (qlButtons == other.qlButtons) && (qvData == other.qvData) && (bSuppress == other.bSuppress);
 }
 
@@ -241,14 +245,15 @@ void OverlaySettings::setPreset(const OverlayPresets preset) {
 }
 
 Settings::Settings() {
-	qRegisterMetaType<ShortcutTarget>("ShortcutTarget");
-	qRegisterMetaTypeStreamOperators<ShortcutTarget>("ShortcutTarget");
-	qRegisterMetaType<QVariant>("QVariant");
+	qRegisterMetaType<ShortcutTarget> ("ShortcutTarget");
+	qRegisterMetaTypeStreamOperators<ShortcutTarget> ("ShortcutTarget");
+	qRegisterMetaType<QVariant> ("QVariant");
 
 	atTransmit = VAD;
 	bTransmitPosition = false;
 	bMute = bDeaf = false;
-	bTTS = true;
+        //Whisper integration
+        bTTS = false;
 	iTTSVolume = 75;
 	iTTSThreshold = 250;
 	iQuality = 40000;
@@ -887,8 +892,10 @@ void Settings::save() {
 	SAVELOAD(iLCDUserViewMinColWidth, "lcd/userview/mincolwidth");
 	SAVELOAD(iLCDUserViewSplitterWidth, "lcd/userview/splitterwidth");
 
+	WDEBUG1 ("VGDEBUG Settings: before certificate check");
 	QByteArray qba = CertWizard::exportCert(kpCertificate);
 	settings_ptr->setValue(QLatin1String("net/certificate"), qba);
+	WDEBUG1 ("VGDEBUG Settings: after certificate check");
 
 	settings_ptr->beginWriteArray(QLatin1String("shortcuts"));
 	int idx = 0;
@@ -903,21 +910,27 @@ void Settings::save() {
 	}
 	settings_ptr->endArray();
 
+	WDEBUG1("VGDEBUG Settings: before messages");
 	settings_ptr->beginWriteArray(QLatin1String("messages"));
+
 	for (QMap<int, quint32>::const_iterator it = qmMessages.constBegin(); it != qmMessages.constEnd(); ++it) {
 		settings_ptr->setArrayIndex(it.key());
 		SAVELOAD(qmMessages[it.key()], "log");
 	}
 	settings_ptr->endArray();
 
+	WDEBUG1("VDEBUG Settings: before messagesounds");
 	settings_ptr->beginWriteArray(QLatin1String("messagesounds"));
+
 	for (QMap<int, QString>::const_iterator it = qmMessageSounds.constBegin(); it != qmMessageSounds.constEnd(); ++it) {
 		settings_ptr->setArrayIndex(it.key());
 		SAVELOAD(qmMessageSounds[it.key()], "logsound");
 	}
 	settings_ptr->endArray();
 
+	WDEBUG1("VDEBUG Settings: before devices");
 	settings_ptr->beginGroup(QLatin1String("lcd/devices"));
+
 	foreach(const QString &d, qmLCDDevices.keys()) {
 		bool v = qmLCDDevices.value(d);
 		if (!v)
@@ -927,7 +940,9 @@ void Settings::save() {
 	}
 	settings_ptr->endGroup();
 
+	WDEBUG1("VDEBUG Settings: before audio");
 	settings_ptr->beginGroup(QLatin1String("audio/plugins"));
+
 	foreach(const QString &d, qmPositionalAudioPlugins.keys()) {
 		bool v = qmPositionalAudioPlugins.value(d);
 		if (!v)

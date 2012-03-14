@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -27,66 +28,50 @@
    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+ #ifndef WTALKINGTHREAD_H
+#define WTALKINGTHREAD_H
 
+#include <QtCore>
+#include <QThread>
+#include <QList>
 
-#include "wConfigFile.h"
-#include "wError.h"
 #include "wGameHandler.h"
-#include "wViewerHandler.h"
 
-#define WHISPER_VERSION "0.2.5"
+namespace whisper {
+	class Connection;
+    class TalkingUser;
+	class Request;
 
+    class TalkingThread : public QThread
+    {
+    public:
+		TalkingThread(GameHandler& rG) : rGame(rG) {bEnd = false;}
+        void run();
+		void end() {bEnd = true;}
+        static void ttSleep(unsigned long msec) { QThread::msleep(msec); };
+        void setUser(const unsigned int&, const QString&, const bool&);
 
+	private:
+		GameHandler& rGame;
+        TalkingUser* userExists(const unsigned int&);
+        QList<TalkingUser> usersArray;
+        bool bEnd;
+		QMutex mUserMutex;
+    };
 
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
+    class TalkingUser {
+    public:
+        TalkingUser(const unsigned int& uId, const QString& uName, const bool& uIsTalking) {id = uId; name = uName; bTalking = uIsTalking;}
+        void setData(const unsigned int&, const QString&, const bool& uisTalking);
+		bool isTalking() {return bTalking;}
+		QString& getName() {return name;}
+		unsigned int getId() {return id;}
 
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
+	private:
+        unsigned int id;
+        QString name;
+        bool bTalking;
+    };
 
-using namespace whisper;
-
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#if defined(Q_OS_WIN)
-	pcAppData = getenv("APPDATA");
-#endif
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
 }
-
-//---------------------------------------------------------------------------
-// main
-//---------------------------------------------------------------------------
-
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
-}
+#endif // WTALKINGTHREAD_H

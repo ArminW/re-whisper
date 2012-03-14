@@ -112,7 +112,10 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void recheckTTS();
 		void msgBox(QString msg);
 		void setOnTop(bool top);
-		void updateTrayIcon();
+                void updateTrayIcon();
+                //Whisper integration
+                void setVolume(float);
+                //End of whisper integration
 		QPair<QByteArray, QImage> openImageFile();
 		void sendChatbarMessage();
 		static const QString defaultStyleSheet;
@@ -220,7 +223,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_PushToTalk_triggered(bool, QVariant);
 		void on_PushToMute_triggered(bool, QVariant);
 		void on_VolumeUp_triggered(bool, QVariant);
-		void on_VolumeDown_triggered(bool, QVariant);
+                void on_VolumeDown_triggered(bool, QVariant);
 		void on_gsMuteSelf_down(QVariant);
 		void on_gsDeafSelf_down(QVariant);
 		void on_gsWhisper_triggered(bool, QVariant);

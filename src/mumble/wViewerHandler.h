@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,65 +29,51 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef WVIEWERHANDLER_H
+#define WVIEWERHANDLER_H
 
-#include "wConfigFile.h"
-#include "wError.h"
+#include <QtCore>
+#include <QtNetwork>
+
+#include "ClientUser.h"
+#include "Global.h"
+
+#include "wConnection.h"
+#include "wRequest.h"
 #include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include "wRequestQueue.h"
+#include "wMessage.h"
+#include "wTalkingThread.h"
 
-#define WHISPER_VERSION "0.2.5"
+namespace whisper {
+	class Connection;
 
+	class ViewerHandler : public GameHandler {
+//        Q_OBJECT
+    public:
+        ViewerHandler(QObject *parent = 0) : GameHandler(parent) {tt = 0;}
+		virtual ~ViewerHandler() {}
+        void run();
 
+		void vhSleep(unsigned long msec);
+        int sendMessage(Message& rMsg);
+        QMutex mutex;
 
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
+		// Delegeation methods forwarding to connection
+        void addParticipant(const unsigned int);
+        void removeParticipant(const unsigned int);
+        void setTalking(const unsigned int);
+		void talkingChanged(bool bTalking, QString& rUserName);
 
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
-using namespace whisper;
-
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#if defined(Q_OS_WIN)
-	pcAppData = getenv("APPDATA");
-#endif
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+    private:
+        static ViewerHandler* pInstance;
+        QTcpSocket* pSocket;
+        RequestQueue requestQueue;
+        Request* request;
+		QMutex mSenderMutex;
+		Connection* connection;
+        TalkingThread* tt;
+   };
 }
 
-//---------------------------------------------------------------------------
-// main
-//---------------------------------------------------------------------------
-
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
-}
+#endif // WVIEWERHANDLER_H

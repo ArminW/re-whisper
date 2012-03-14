@@ -1,4 +1,5 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+/* Copyright (C) 2005-2010, Thorvald Natvig <thorvald@natvig.com>,
+                            Volker Gaessler <volker.gaessler@vcomm.ch
 
    All rights reserved.
 
@@ -28,65 +29,29 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef WXMLWRITER_H
+#define WXMLWRITER_H
 
-#include "wConfigFile.h"
-#include "wError.h"
-#include "wGameHandler.h"
-#include "wViewerHandler.h"
+#include <QtCore/QByteArray>
 
-#define WHISPER_VERSION "0.2.5"
+namespace whisper {
 
+    class XmlWriter {
+    public:
+        XmlWriter(QByteArray* pD);
+        XmlWriter(QByteArray& rD);
 
+        void writeStart(const char *pcTag);
+        void writeEnd(const char *pcTag);
+        void writeAttribute(const char *pcName, const char *pcValue);
+        void writeAttribute(const char *pcName, QString& rS);
+        void writeText(const char *pcText);
+        void writeText(QString& rS);
+        void writeEmpty(const char *pcTag);
 
-// dir name in application directory: source
-#define WHISPER_APP_DIR "whisper"		
-
-// dir name in data directory
-#define WHISPER_DATA_DIR "whisper"		
-
-using namespace whisper;
-
-
-void InitializeDataDir() {
-	// check if whisper directory exitsts. If not created it and copy files.
-	// currently only implemented for Windows.
-
-	char* pcAppData = NULL;
-	QString sConfigDir;
-
-#if defined(Q_OS_WIN)
-	pcAppData = getenv("APPDATA");
-#endif
-	if (pcAppData) {
-		sConfigDir = pcAppData;
-		sConfigDir += "/";
-		sConfigDir += WHISPER_DATA_DIR;
-		sConfigDir += "/";
-		QDir dir(sConfigDir);
-		if (!dir.exists()) {
-			dir.mkpath(sConfigDir);
-		}
-	}
+    private:
+        QByteArray* pData;
+    };
 }
 
-//---------------------------------------------------------------------------
-// main
-//---------------------------------------------------------------------------
-
-int main_application(int argc, char **argv, GameHandler *pGh);
-
-int main(int argc, char **argv) {
-
-	InitializeDataDir();
-
-	// Load config data (no logging up to this point)
-	ConfigFile::init();
-
-	WWRITE2("Start Version %s", WHISPER_VERSION); 
-	WWRITE2("Compiled at %s", __TIMESTAMP__);
-
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
-}
+#endif // WXMLWRITER_H

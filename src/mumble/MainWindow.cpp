@@ -2043,6 +2043,19 @@ void MainWindow::on_VolumeDown_triggered(bool down, QVariant) {
 	}
 }
 
+//Whisper integration
+void MainWindow::setVolume(float vol) {
+    if(vol < 0.0f)
+        vol = 0.0f;
+    else if(vol > 1.0f)
+        vol = 1.0f;
+    else {
+        g.s.fVolume = vol;
+    }
+}
+//End of Whisper integration
+
+
 Channel *MainWindow::mapChannel(int idx) const {
 	if (! g.uiSession)
 		return NULL;
@@ -2343,6 +2356,8 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			QStringList qsl;
 			foreach(QSslError e, g.sh->qlErrors)
 				qsl << QString::fromLatin1("<li>%1</li>").arg(e.errorString());
+                        //Whisper integration
+                        /*
 
 			QMessageBox qmb(QMessageBox::Warning, QLatin1String("Mumble"),
 			                tr("<p>%1.<br />The specific errors with this certificate are: </p><ol>%2</ol>"
@@ -2353,14 +2368,17 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			qmb.setEscapeButton(QMessageBox::No);
 
 			QPushButton *qp = qmb.addButton(tr("&View Certificate"), QMessageBox::ActionRole);
+                        */
 			forever {
-				int res = qmb.exec();
-
-				if ((res == 0) && (qmb.clickedButton() == qp)) {
+                                //Whisper integration
+                                //int res = qmb.exec();
+                                int res = QMessageBox::Yes;
+                                /*if ((res == 0) && (qmb.clickedButton() == qp)) {
 					ViewCert vc(g.sh->qscCert, this);
 					vc.exec();
-					continue;
-				} else if (res == QMessageBox::Yes) {
+                                        continue;
+                                } else */
+                                if (res == QMessageBox::Yes) {
 					Database::setDigest(host, port, QString::fromLatin1(c.digest(QCryptographicHash::Sha1).toHex()));
 					qaServerDisconnect->setEnabled(true);
 					on_Reconnect_timeout();

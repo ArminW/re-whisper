@@ -86,6 +86,8 @@ Global::Global() {
 	uiImageLength = 131072;
 
 	qs = NULL;
+	//Whisper integration game handler
+	gh = 0;
 
 	ocIntercept = NULL;
 	bc = NULL;
