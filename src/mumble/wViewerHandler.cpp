@@ -98,7 +98,7 @@ void ViewerHandler::run() {
 			}
 
             //Splits the buffer in several requests
-            QStringList& rlRequests = qsData.split("\n\n\n", QString::SkipEmptyParts);
+            QStringList rlRequests = qsData.split("\n\n\n", QString::SkipEmptyParts);
 
             //Counts number of requests
             int count = rlRequests.size();
