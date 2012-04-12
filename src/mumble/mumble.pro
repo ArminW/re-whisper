@@ -23,7 +23,8 @@ HEADERS	*= \
     wXmlWriter.h \
     wTalkingThread.h \
     wConfigFile.h
-SOURCES	*= \ 
+SOURCES	*= \
+    main_application.cpp \
     wConnection.cpp \
     wVoiceClient.cpp \
     wViewerHandler.cpp \

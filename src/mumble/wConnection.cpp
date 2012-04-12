@@ -21,6 +21,7 @@
 #include <QtCore>
 
 #include "ClientUser.h"
+#include "Settings.h"
 
 #include "wConnection.h"
 #include "wError.h"
@@ -101,13 +102,13 @@ void Connection::setTalking(unsigned int id) {
 	WASSERT(p);
 
 	switch (p->tsState) {
-		case ClientUser::Talking:
-		case ClientUser::TalkingWhisper:
-		case ClientUser::TalkingWhisperChannel:
+		case Settings::Talking:
+		case Settings::Whispering:
+		case Settings::Shouting:
 			rTalk.setUser(id, p->qsName, true);
 			WDEBUG3("ViewerHandler: %d %s is talking", id, p->qsName.toAscii().data());
 			break;
-		case ClientUser::TalkingOff:
+		case Settings::Passive:
 		default:
 			rTalk.setUser(id, p->qsName, false);
 			WDEBUG3("ViewerHandler: %d %s is not talking", id, p->qsName.toAscii().data());
