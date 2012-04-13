@@ -16,3 +16,4 @@ vc100.pdb
 *.orig
 *.patch
 *.rej
+plugins/manual/ui_manual.h
