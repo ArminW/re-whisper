@@ -1,7 +1,13 @@
 With dbus:
-qmake CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server -recursive
+qmake CONFIG-=sse2 CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server CONFIG+=no-elevation CONFIG+=no-update -recursive
 
-Without dbus (recommended, mandatory for use with Imprudence):
-qmake CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server CONFIG+=no-dbus -recursive
+Without dbus (recommended, mandatory for use with Imprudence on Windows):
+qmake CONFIG-=sse2 CONFIG+=no-asio CONFIG+=no-g15 CONFIG+=no-11x CONFIG+=no-bonjour CONFIG+=no-server CONFIG+=no-dbus CONFIG+=no-elevation CONFIG+=no-update -recursive
 
+For Debian/Ubuntu/based Linux distros you might need to use qmake-qt4 instead of qmake
+
+Windows:
 nmake release
+
+Linux:
+make
