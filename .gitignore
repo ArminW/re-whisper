@@ -12,3 +12,7 @@ vc100.pdb
 *~
 *.pb.h
 *.pb.cc
+*.diff
+*.orig
+*.patch
+*.rej

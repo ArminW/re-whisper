@@ -181,7 +181,7 @@ extern bool Q_GUI_EXPORT qt_use_native_dialogs;
 // that we're about to reparent.
 
 void OverlayClient::showGui() {
-#if defined(QT3_SUPPORT) || defined(Q_WS_WIN)
+#if defined(QT3_SUPPORT) && defined(Q_WS_WIN)
 	if (QCoreApplication::loopLevel() > 1)
 		return;
 #else
@@ -288,7 +288,7 @@ outer:
 }
 
 void OverlayClient::hideGui() {
-#if defined(QT3_SUPPORT) || defined(Q_WS_WIN)
+#if defined(QT3_SUPPORT) && defined(Q_WS_WIN)
 	if (QCoreApplication::loopLevel() > 1) {
 		QCoreApplication::exit_loop();
 		QMetaObject::invokeMethod(this, "hideGui", Qt::QueuedConnection);

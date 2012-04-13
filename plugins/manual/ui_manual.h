@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'manual.ui'
 **
-** Created: Thu Apr 12 17:22:37 2012
-**      by: Qt User Interface Compiler version 4.6.2
+** Created: Thu 12. Apr 23:36:08 2012
+**      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
