@@ -123,9 +123,6 @@ win32 {
     CONFIG	*= wasapi
   }
 
-  CONFIG(release, debug|release) {
-    QMAKE_LFLAGS *= /MANIFESTUAC:\"level=\'asInvoker\' uiAccess=\'true\'\"
-  }
 }
 
 unix {
