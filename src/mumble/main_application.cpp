@@ -386,24 +386,21 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 	// Main Window
 	g.mw=new MainWindow(NULL);
 
-    //Whisper Integration
-    ConfigFile& cf(ConfigFile::getInstance());
-    if(cf.isValid()) {
-        if(cf.getValue("debug", "debug") == "true") {
-            g.mw->setVisible(true);
-            g.mw->qstiIcon->setVisible(true);
-        }
-		else {
-			g.mw->setVisible(false);
+	//Whisper Integration
+//	g.mw->show();
+
+	ConfigFile& cf(ConfigFile::getInstance());
+	if(cf.isValid()) {
+		if(cf.getValue("debug", "debug") == "true") {
+			g.mw->show();
+			g.mw->qstiIcon->setVisible(true);
+		} else {
 			g.mw->qstiIcon->setVisible(false);
 		}
-    }
-	else {
-	    //g.mw->show();
-		g.mw->setVisible(false);
+	} else {
 		g.mw->qstiIcon->setVisible(false);
 	}
-
+	//End of Whisper Integration
 
 #ifdef USE_DBUS
 	new MumbleDBus(g.mw);

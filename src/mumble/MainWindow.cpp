@@ -886,7 +886,7 @@ void MainWindow::setupView(bool toggle_minimize) {
 		move(geom.x(), geom.y());
 	}
 
-	show();
+	//show(); //whisper integration: initial main mumble window
 	activateWindow();
 }
 
