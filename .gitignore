@@ -12,3 +12,10 @@ vc100.pdb
 *~
 *.pb.h
 *.pb.cc
+*.diff
+*.orig
+*.patch
+*.rej
+plugins/manual/ui_manual.h
+src/mumble/moc_wRequest.h
+src/mumble/moc_wViewerHandler.h
