@@ -53,13 +53,17 @@ void InitializeDataDir() {
 
 	char* pcAppData = NULL;
 	QString sConfigDir;
-
 #if defined(Q_OS_WIN)
 	pcAppData = getenv("APPDATA");
+#else
+	pcAppData = getenv("HOME");
 #endif
 	if (pcAppData) {
 		sConfigDir = pcAppData;
 		sConfigDir += "/";
+#if defined(Q_OS_UNIX)
+		sConfigDir += ".";
+#endif
 		sConfigDir += WHISPER_DATA_DIR;
 		sConfigDir += "/";
 		QDir dir(sConfigDir);
@@ -73,8 +77,8 @@ void InitializeDataDir() {
 // main
 //---------------------------------------------------------------------------
 
-int main_application(int argc, char **argv, GameHandler *pGh);
-
+// int main_application(int argc, char **argv, GameHandler *pGh);
+int main_application(int argc, char **argv);
 int main(int argc, char **argv) {
 
 	InitializeDataDir();
@@ -85,8 +89,5 @@ int main(int argc, char **argv) {
 	WWRITE2("Start Version %s", WHISPER_VERSION); 
 	WWRITE2("Compiled at %s", __TIMESTAMP__);
 
-	// GameHandler *pVh = new NullGameHandler(0);
-	GameHandler *pVh = new ViewerHandler(0);
-
-	return main_application(argc, argv, pVh);
+	return main_application(argc, argv);
 }

@@ -33,11 +33,13 @@ namespace whisper {
         void writeErrorLog(QString& rs);
         void writeOutLog(QString& rs);
 		bool bDebug;
+	void setLogLevel(int level) { mLogLevel = level; }
     protected:
         Error();
         void open();
     private:
         static Error* pInstance;
+	int mLogLevel;
         QFile* pLog;
 		QMutex mWriteMutex;
     };

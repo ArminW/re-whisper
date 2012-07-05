@@ -37,16 +37,17 @@ Error& Error::instance() {
 }
 
 //File to log
-Error::Error() : pLog(NULL) {
+Error::Error() : pLog(NULL), mLogLevel(0) {
 	QString sLogLevel = ConfigFile::getInstance().getValue("debug", "log_level");
-	bDebug = (sLogLevel == QString("debug"));
-
+	bDebug = (sLogLevel == QString("debug")||mLogLevel > 1);
+	
 	// create the log file
 	// Unix: /var/whisper.log
 	// Windows: <userappdata>/whisper/whisper.log
 	// Mac: To Do
 
-	QString sLogFile = "/var/";
+	QString sLogFile = getenv("HOME");
+	sLogFile += "/.whisper/";
 
 #ifdef Q_OS_WIN
 	char* pcAppData = NULL;

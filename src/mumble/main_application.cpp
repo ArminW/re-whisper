@@ -131,7 +131,7 @@ bool QAppMumble::winEventFilter(MSG *msg, long *result) {
 }
 #endif
 
-int main_application(int argc, char **argv, GameHandler *pGh) {
+int main_application(int argc, char **argv) {
 	int res = 0;
 
 	QT_REQUIRE_VERSION(argc, argv, "4.4.0");
@@ -170,6 +170,8 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 #endif
 
 	bool bAllowMultiple = false;
+	bool bIsWhisper = false;
+	int whisperLogLevel = 0;
 	QUrl url;
 
 	if (a.arguments().count() > 1) {
@@ -179,6 +181,15 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 				bAllowMultiple = true;
 			} else if (args.at(i) == QLatin1String("-n")) {
 				g.s.bSuppressIdentity = true;
+//< Whisper integration: a LL like virtual world viewer always starts the voice client 
+// with the argument -ll <log level> so use that as  an indicator if mumble was started 
+// by a virtual world viewer, if not behave just like a normal mumble
+			} else if (args.at(i) == QLatin1String("-ll")) {
+				bIsWhisper = true;
+				if (i+1 < args.count()) {
+					whisperLogLevel = args.at(++i).toInt(&bIsWhisper, 10);
+				}
+// Whisper integration />
 			} else {
 				QUrl u = QUrl::fromEncoded(args.at(i).toUtf8());
 				if (u.isValid() && (u.scheme() == QLatin1String("mumble"))) {
@@ -387,18 +398,21 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 	g.mw=new MainWindow(NULL);
 
 	//Whisper Integration
-//	g.mw->show();
-
-	ConfigFile& cf(ConfigFile::getInstance());
-	if(cf.isValid()) {
-		if(cf.getValue("debug", "debug") == "true") {
-			g.mw->show();
-			g.mw->qstiIcon->setVisible(true);
+	if (!bIsWhisper || whisperLogLevel > 0) {
+		g.mw->show();
+		g.mw->qstiIcon->setVisible(true);
+	} else {
+		ConfigFile& cf(ConfigFile::getInstance());
+		if(cf.isValid()) {
+			if(cf.getValue("debug", "debug") == "true") {
+				g.mw->show();
+				g.mw->qstiIcon->setVisible(true);
+			} else {
+				g.mw->qstiIcon->setVisible(false);
+			}
 		} else {
 			g.mw->qstiIcon->setVisible(false);
 		}
-	} else {
-		g.mw->qstiIcon->setVisible(false);
 	}
 	//End of Whisper Integration
 
@@ -422,14 +436,17 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 
 	a.setQuitOnLastWindowClosed(false);
 
-    //Beginning of Whisper integration
-	//g.gh = new ViewerHandler(0);
-	g.gh = pGh;
-	//g.gh = new whisper::DefaultGameHandler;
-	g.gh->start();
-    //ViewerHandler& rViewer(ViewerHandler::instance());
-    //rViewer.start();
-    //End of Whisper Integration
+	//Beginning of Whisper integration
+	if (bIsWhisper){
+		Error::instance().setLogLevel(whisperLogLevel);
+		g.gh = new ViewerHandler(0);
+		//g.gh = pGh;
+		//g.gh = new whisper::DefaultGameHandler;
+		g.gh->start();
+		//ViewerHandler& rViewer(ViewerHandler::instance());
+		//rViewer.start();
+	}	
+	// End of Whisper Integration
 
 	// Configuration updates
 	bool runaudiowizard = false;
@@ -450,8 +467,6 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 
 	g.s.uiUpdateCounter = 1;
 
-        //Whisper integration
-        /*
 	if (! CertWizard::validateCert(g.s.kpCertificate)) {
 		QDir qd(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
 		QFile qf(qd.absoluteFilePath(QLatin1String("MumbleAutomaticCertificateBackup.p12")));
@@ -462,10 +477,16 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 				g.s.kpCertificate = kp;
 		}
 		if (! CertWizard::validateCert(g.s.kpCertificate)) {
-			CertWizard *cw = new CertWizard(g.mw);
-			cw->exec();
-			delete cw;
-
+//< Whisper integration: generate cert without asking
+// 			CertWizard *cw = new CertWizard(g.mw);
+// 			cw->exec();
+// 			delete cw;
+			if (!bIsWhisper) {
+				CertWizard *cw = new CertWizard(g.mw);
+				cw->exec();
+				delete cw;
+			} 
+//Whisper integration />
 			if (! CertWizard::validateCert(g.s.kpCertificate)) {
 				g.s.kpCertificate = CertWizard::generateNewCert();
 				if (qf.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered)) {
@@ -475,8 +496,6 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 			}
 		}
 	}
-        */
-        //End of whisper integration
 
 	if (QDateTime::currentDateTime().daysTo(g.s.kpCertificate.first.first().expiryDate()) < 14)
 		g.l->log(Log::Warning, CertWizard::tr("<b>Certificate Expiry:</b> Your certificate is about to expire. You need to renew it, or you will no longer be able to connect to servers you are registered on."));
@@ -507,31 +526,34 @@ int main_application(int argc, char **argv, GameHandler *pGh) {
 		qApp->postEvent(g.mw, oue);
 #endif
 	} else {
-		// Whisper integration: Do not open ConnectDialog
-		// g.mw->on_qaServerConnect_triggered(true);
+		// Whisper integration: Do not open ConnectDialog if started as whisper
+		if  (! bIsWhisper)
+			g.mw->on_qaServerConnect_triggered(true);
 	}
 
 	if (! g.bQuit)
 		res=a.exec();
 
 	//Whisper integration - debugging
-	WDEBUG1("Stopping viewerHandler execution...");
-	g.gh->end();
-	g.gh->wait();
-	/*
-	if(rViewer.isRunning()) {
-		rViewer.end();
-        	rViewer.wait();
+	if (bIsWhisper){
+		WDEBUG1("Stopping viewerHandler execution...");
+		g.gh->end();
+		g.gh->wait();
+		/*
+		if(rViewer.isRunning()) {
+			rViewer.end();
+			rViewer.wait();
+		}
+		*/
+		//WDEBUG2("viewerHandler status: %s", rViewer.isFinished() ? "Finished" : "Running");
+		delete g.gh;
+		g.gh = 0;
+	
+		WDEBUG1("Out of execution thread - In main.");
+	
+		g.s.save();
+		WDEBUG1("After g.s.save()");
 	}
-	*/
-	//WDEBUG2("viewerHandler status: %s", rViewer.isFinished() ? "Finished" : "Running");
-	delete g.gh;
-	g.gh = 0;
-
-	WDEBUG1("Out of execution thread - In main.");
-
-	g.s.save();
-	WDEBUG1("After g.s.save()"); 
 	//End of whisper integration debugging.
 
 

@@ -48,15 +48,16 @@ ConfigFile::ConfigFile() {
 	// on Windows <userappdata>/whisper/whisper.ini
 	// on Mac: To Do
 
-	QString sConfigFile = "/etc/";
-
+	//QString sConfigFile = "/etc/";
+	QString sConfigFile = getenv("HOME");
+	sConfigFile += "/.whisper/";
 #ifdef Q_OS_WIN
 	sConfigFile = QDir(".").absolutePath();
 	sConfigFile += "/whisper/";
 #endif
 
 	sConfigFile += "whisper.ini";
-
+    qDebug() << sConfigFile;
     //Creates the QFile object
     cf = new QFile(sConfigFile);
     //Opens the file
